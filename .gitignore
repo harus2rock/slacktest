@@ -1,2 +1,5 @@
 __pycache__
-data/*
+data/models/*
+!data/models/.gitkeep
+data/word2vec/*
+!data/word2vec/.gitkeep
