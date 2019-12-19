@@ -22,17 +22,20 @@ def reply_from_watson(message):
         }
     ).get_result()
 
-    res = response['output']['generic'][0]
-    while(True):
-        if res['response_type'] == 'text':
-            res = res['text']
-            break
-        elif res['response_type'] == 'suggestion':
-            res = res['suggestions'][0]['output']['generic'][0]
+    for res in response['output']['generic']:
+        while(True):
+            if res['response_type'] == 'text':
+                res = res['text']
+                break
+            elif res['response_type'] == 'suggestion':
+                res = res['suggestions'][0]['output']['generic'][0]    
+        message.reply(str(res))    
 
-    message.reply(text+'って言った？'+str(res))
 
-    print(model.classify([text],w2v))
+    ans = model.classify([text],w2v)[3]
+    print('ans : '+ans)
+    print('response : ')
+    print(response)
 
 # Response
 @bot.listen_to(r'.+')
