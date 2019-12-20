@@ -9,8 +9,11 @@ from plugins import consts
 WATSON_API_KEY = str(os.getenv('WATSONAPIKEY_WATSON-BOT'))
 WATSON_ASSISTANT_ID = str(os.getenv('WATSONASSISTANTID_WATSON-BOT'))
 
+texts = []
+
 # Reply
 def reply_from_watson(message):
+    global texts
     text = message.body['text']
 
     response = assistant.message(
@@ -29,10 +32,16 @@ def reply_from_watson(message):
                 break
             elif res['response_type'] == 'suggestion':
                 res = res['suggestions'][0]['output']['generic'][0]    
-        message.reply(str(res))    
+        # message.reply(str(res))    
 
-
-    ans = model.classify([text],w2v)[3]
+    texts.append(text)
+    while(len(texts) > 3):
+        del texts[0]
+    else:
+        print('texts : ')
+        print(texts)
+    
+    ans = model.classify(texts,w2v)[3]
     print('ans : '+ans)
     print('response : ')
     print(response)
